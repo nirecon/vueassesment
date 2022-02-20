@@ -76,6 +76,13 @@
             <td v-show="check">{{ item[2019] }}</td>
             <td v-show="check">{{ item[2020] }}</td>
             <td v-show="check">{{ item[2021] }}</td>
+            <td
+              v-show="!check"
+              v-for="(element, key) in monthsList[index].data"
+              :key="key"
+            >
+              {{ element }}
+            </td>
           </tr>
           <tr v-if="check">
             <td v-for="index in 10" :key="index"></td>
@@ -103,6 +110,7 @@ import {
   lineItemData,
   summaryMonths,
   summaryYears,
+  months,
 } from "../assets/staticData/StaticData";
 export default {
   name: "OpprtunityComponent",
@@ -114,20 +122,36 @@ export default {
       lineItem: lineItemData,
       yearSummary: summaryYears.responseData.yearsData,
       monthSummary: summaryMonths.responseData,
+      months: months,
       check: true,
     };
   },
   computed: {
     yearList() {
       let result = [];
-      lineItemData.forEach((element) => {
-        let d = element;
+      this.lineItem.forEach((element) => {
+        let d = { ...element };
         summaryYears.responseData.yearsData.forEach((x) => {
           x.lineData.forEach((item) => {
             if (item.recordId === element.productFLIId) {
               d[x.year] = item.amount;
             }
           });
+        });
+        result.push(d);
+      });
+      return result;
+    },
+    monthsList() {
+      let result = [];
+      this.lineItem.forEach((element) => {
+        let d = { ...element };
+        summaryMonths.responseData.linesData.forEach((x) => {
+          if (x.recordId === element.productFLIId) {
+            d["startYear"] = x.startYear;
+            d["startMonth"] = x.startMonth;
+            d["data"] = x.data;
+          }
         });
         result.push(d);
       });
