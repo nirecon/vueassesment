@@ -52,6 +52,22 @@ export var summaryYears = {
   },
   message: null,
 };
+
+export const months = [
+  { monthValue: 1, Name: "JAN" },
+  { monthValue: 2, Name: "FEB" },
+  { monthValue: 3, Name: "MAR" },
+  { monthValue: 4, Name: "APR" },
+  { monthValue: 5, Name: "MAY" },
+  { monthValue: 6, Name: "JUN" },
+  { monthValue: 7, Name: "JULY" },
+  { monthValue: 8, Name: "AUG" },
+  { monthValue: 9, Name: "SEP" },
+  { monthValue: 10, Name: "OCT" },
+  { monthValue: 11, Name: "NOV" },
+  { monthValue: 12, Name: "DEC" },
+];
+
 export var summaryMonths = {
   status: "success",
   responseData: {
