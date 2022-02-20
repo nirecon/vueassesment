@@ -14,8 +14,15 @@
           VIEW <span class="caret"></span>
         </button>
         <div class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item" href="#">Show full attributes</a>
-          <a class="dropdown-item" href="#">Show monthly summary</a>
+          <a class="dropdown-item" href="javascript:void(0)"
+            >Show full attributes</a
+          >
+          <a
+            class="dropdown-item"
+            href="javascript:void(0)"
+            @click="changeList()"
+            >Show monthly summary</a
+          >
         </div>
       </div>
     </div>
@@ -34,15 +41,22 @@
             <th>Months</th>
             <th>Revenue Recognition</th>
             <th>Commited</th>
-            <!-- <v-if =""> -->
-            <th v-for="(item, index) in yearSummary" :key="index">
+            <th
+              v-show="check"
+              v-for="(item, index) in yearSummary"
+              :key="index"
+            >
               {{ item.year }}
             </th>
-            <!-- </v-if> -->
+            <th
+              v-show="!check"
+              v-for="(item, index) in yearSummary"
+              :key="index"
+            ></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in lineItem" :key="index">
+          <tr v-for="(item, index) in yearList" :key="index">
             <td>
               {{ item.productItemName ? item.productItemName : "-" }}
             </td>
@@ -59,12 +73,9 @@
               }}
             </td>
             <td>{{ item.committed ? item.committed : "-" }}</td>
-            <td
-              v-for="(qwe, serial1) in yearSummary[index].lineData"
-              :key="serial1"
-            >
-              {{ qwe.amount ? qwe.amount : "-" }}
-            </td>
+            <td v-show="check">{{ item[2019] }}</td>
+            <td v-show="check">{{ item[2020] }}</td>
+            <td v-show="check">{{ item[2021] }}</td>
           </tr>
           <tr v-if="check">
             <td v-for="index in 10" :key="index"></td>
@@ -72,7 +83,7 @@
               {{ qwe.summaryAmount }}
             </td>
           </tr>
-          <!-- <tr v-if="check">
+          <tr v-if="!check">
             <td v-for="index in 10" :key="index"></td>
             <td
               v-for="(qwe, serial1) in monthSummary.summaryAmount"
@@ -80,7 +91,7 @@
             >
               {{ qwe }}
             </td>
-          </tr> -->
+          </tr>
         </tbody>
       </table>
     </div>
@@ -107,13 +118,25 @@ export default {
     };
   },
   computed: {
-    iteratinglist: function () {
-      return { ...this.lineItem, ...this.yearSummary };
+    yearList() {
+      let result = [];
+      lineItemData.forEach((element) => {
+        let d = element;
+        summaryYears.responseData.yearsData.forEach((x) => {
+          x.lineData.forEach((item) => {
+            if (item.recordId === element.productFLIId) {
+              d[x.year] = item.amount;
+            }
+          });
+        });
+        result.push(d);
+      });
+      return result;
     },
   },
   methods: {
     changeList: function () {
-      this.yearsList = { ...lineItemData, years: summaryMonths.responseData };
+      this.check = !this.check;
     },
   },
 };
