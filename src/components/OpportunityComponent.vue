@@ -155,12 +155,31 @@ export default {
         });
         result.push(d);
       });
+      result.forEach((item) => {
+        var startDate = new Date(
+          this.monthSummary.startYear +
+            "-" +
+            this.monthSummary.startMonth +
+            "-01"
+        );
+        var endDate = new Date(item.startYear + "-" + item.startMonth + "-01");
+        var diff = this.monthDiff(startDate, endDate);
+        while (diff > 0) {
+          item.data.unshift("");
+          diff--;
+        }
+      });
       return result;
     },
   },
   methods: {
     changeList: function () {
       this.check = !this.check;
+    },
+    monthDiff: function (dt1, dt2) {
+      var diffMonth = (dt2.getTime() - dt1.getTime()) / 1000;
+      diffMonth /= 60 * 60 * 24 * 7 * 4;
+      return Math.abs(Math.round(diffMonth));
     },
   },
 };
